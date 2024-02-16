@@ -11,25 +11,16 @@ import {HomeComponent} from "./home/home.component";
   standalone: true,
   imports: [CommonModule, HousingLocationComponent,RouterModule, HomeComponent],
   template: `
-    <a [routerLink]="['/']">
-      <header class="brand-name">
-        <img class="brand-logo" src="/assets/logo.svg" alt="logo" aria-hidden="true">
-      </header>
-    </a>
-
-    <section class="content">
-      <router-outlet></router-outlet>
-    </section>
-    <section>
-      <form>
-        <input type="text" placeholder="Filter by city" #filter>
-        <button class="primary" type="button" (click)="filterResults(filter.value)">Search</button>
-      </form>
-    </section>
-
-    <section class="results">
-      <app-housing-location *ngFor="let housingLocation of filteredLocationList" [housingLocation]="housingLocation"></app-housing-location>
-    </section>
+    <main>
+      <a [routerLink]="['/']">
+        <header class="brand-name">
+          <img class="brand-logo" src="/src/assets/logo.svg" alt="logo" aria-hidden="true">
+        </header>
+      </a>
+      <section class="content">
+        <router-outlet></router-outlet>
+      </section>
+    </main>
   `,
   styleUrls: ['./app.component.css']
 })
@@ -52,9 +43,9 @@ export class AppComponent {
     );
   }
   constructor() {
-    this.housingService.getAllHousingLocations().then((housingLocationList: HousingLocation[]) => {
-      this.housingLocationList = housingLocationList;
-      this.filteredLocationList = housingLocationList;
-    });
+    // this.housingService.getAllHousingLocations().then((housingLocationList: HousingLocation[]) => {
+    //   this.housingLocationList = housingLocationList;
+    //   this.filteredLocationList = housingLocationList;
+    // });
   }
 }

@@ -22,7 +22,7 @@
 }
 
 .listing-features > .section-heading {
-  color: var(--secondary-color);
+  color: #9c96ff;
   font-size: 24pt;
   margin-bottom: 15px;
 }
@@ -48,7 +48,7 @@ label, input {
   display: block;
 }
 label {
-  color: var(--secondary-color);
+  color: #9c96ff;
   font-weight: bold;
   text-transform: uppercase;
   font-size: 12pt;

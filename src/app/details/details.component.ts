@@ -23,8 +23,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
           <li>Units available: {{ housingLocation?.availableUnits }}</li>
           <li>Does this location have wifi: {{ housingLocation?.wifi }}</li>
           <li>Does this location have laundry: {{ housingLocation?.laundry }}</li>
-          <li>Latitude: {{housingLocation?}}</li>
-          <li>Longtitude: {{housingLocation?}}</li>
+          <li>Latitude: {{ housingLocation?.coordinates?.latitude }}</li>
+          <li>Longitude: {{ housingLocation?.coordinates?.longitude }}</li>
         </ul>
       </section>
       <section class="listing-apply">
@@ -41,8 +41,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
           <button type="submit" class="primary">Apply now</button>
         </form>
       </section>
-    </article>
-  `,
+    </article>`,
   styleUrl: './details.component.css'
 })
 export class DetailsComponent {
@@ -55,12 +54,14 @@ export class DetailsComponent {
     lastName: new FormControl(''),
     email: new FormControl('')
   });
+
   constructor() {
     const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     this.housingService.getHousingLocationById(housingLocationId).then(housingLocation => {
       this.housingLocation = housingLocation;
     });
   }
+
   submitApplication() {
     this.housingService.submitApplication(
       this.applyForm.value.firstName ?? '',
