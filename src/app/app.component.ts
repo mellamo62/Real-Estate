@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { HousingLocationComponent} from "./housing-location/housing-location.component";
-import {CommonModule} from "@angular/common";
+import {CommonModule, NgOptimizedImage} from "@angular/common";
 import { HousingLocation } from './housinglocation';
 import { HousingService} from "./housing.service";
 import { RouterModule } from '@angular/router';
@@ -9,14 +9,16 @@ import {HomeComponent} from "./home/home.component";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HousingLocationComponent,RouterModule, HomeComponent],
+  imports: [CommonModule, HousingLocationComponent, RouterModule, HomeComponent, NgOptimizedImage],
   template: `
     <main>
-      <a [routerLink]="['/']">
-        <header class="brand-name">
-          <img class="brand-logo" src="/src/assets/logo.svg" alt="logo" aria-hidden="true">
-        </header>
-      </a>
+      <header class="brand-name">
+        <a [routerLink]="['/']">
+          <img class="brand-logo" ngSrc="/src/assets/logo.svg" alt="logo" aria-hidden="true" height="44" width="151">
+        </a>
+
+        <a [routerLink]="['/login']" style="float: right;">Login</a>
+      </header>
       <section class="content">
         <router-outlet></router-outlet>
       </section>
