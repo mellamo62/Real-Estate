@@ -1,10 +1,10 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {MapService} from "../map.service";
-import L, {marker, tileLayer} from "leaflet";
+import * as L from "leaflet";
+import {marker} from "leaflet";
 import {HousingLocation} from "../housinglocation";
 import {ActivatedRoute} from "@angular/router";
 import {HousingService} from "../housing.service";
-import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 
 @Component({
   selector: 'app-map',
@@ -12,6 +12,7 @@ import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
   imports: [],
   template: `
     <section>
+      <button (click)="usuarioLocation()">Ver posicion usuario</button>
       <button (click)="casa()">Volver posicion casa</button>
         <div id="map"></div>
       <div>
@@ -43,12 +44,17 @@ export class MapComponent implements OnInit{
   route: ActivatedRoute = inject(ActivatedRoute);
   housingLocation: HousingLocation|undefined;
   housingService= inject(HousingService);
+
   constructor( private placeSvc:MapService) {
     const housinLocationId = parseInt(this.route.snapshot.params['id'],10);
     this.housingService?.getHousingLocationById(housinLocationId).then(housinLocation=>{
       this.housingLocation=housinLocation;
-      console.log(this.housingLocation);
     })
+    setTimeout(()=>{
+      this.placeSvc.getUserLocation();
+      this.geo=this.placeSvc.useLocation;
+    },1000)
+
   }
 
   ngOnInit() {
@@ -69,7 +75,7 @@ export class MapComponent implements OnInit{
         this.icon=data.current.condition.icon;
 
         })
-        .catch((error)=>console.log("HELLO"+error))
+        .catch((error)=>console.log(error))
     },1000)
 
 
@@ -82,7 +88,7 @@ export class MapComponent implements OnInit{
       this.map = new L.Map('map').setView([<number>this.housingLocation?.coordinates.longitude,<number> this.housingLocation?.coordinates.latitude],13);
 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
+        maxZoom: 10,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(this.map);
     },1000);
@@ -93,9 +99,26 @@ export class MapComponent implements OnInit{
   casa(){
     setTimeout(()=>{
 
-
+      this.map.remove();
+      this.map = new L.Map('map').setView([<number>this.housingLocation?.coordinates.longitude,<number> this.housingLocation?.coordinates.latitude],13);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 10,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(this.map);
       marker([<number>this.housingLocation?.coordinates.longitude, <number>this.housingLocation?.coordinates.latitude]).addTo(this.map).bindPopup("<strong>Casa</strong>").openPopup();
     },1000);
+
+  }
+
+  usuarioLocation(){
+
+    this.map.remove();
+    this.map = new L.Map('map').setView(this.geo,13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 10,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(this.map);
+    marker(this.geo).addTo(this.map).bindPopup("<strong>Casa</strong>").openPopup();
 
   }
 

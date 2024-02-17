@@ -15,7 +15,6 @@ export class MapService {
     navigator.geolocation.getCurrentPosition(
       ({coords})=>{
         this.useLocation= [coords.latitude, coords.longitude];
-        console.log(this.useLocation);
       }
     );
 
